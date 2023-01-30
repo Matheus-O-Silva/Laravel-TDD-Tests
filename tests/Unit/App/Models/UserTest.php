@@ -9,60 +9,38 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use PHPUnit\Framework\TestCase;
 
-class UserTest extends TestCase
+class UserTest extends ModelTestCase
 {
-    protected function model(): User
+    protected function model(): Model
     {
         return new User();
     }
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_traits()
+    protected function traits(): array
     {
-        $traits = array_keys(class_uses($this->model()));
-
-        $expectedTraits = [
+        return [
             HasApiTokens::class,
             HasFactory::class,
             Notifiable::class
         ];
-
-        $this->assertEquals($expectedTraits, $traits);
     }
 
-    public function test_fillable()
+    protected function fillable(): array
     {
-        $fillable = $this->model()->getFillable();
-
-        $expectedFillable = [
+        return [
             'name',
             'email',
             'password'
         ];
-
-        $this->assertEquals($expectedFillable, $fillable);
     }
 
-    public function test_incrementing_is_false()
+    protected function casts(): array
     {
-        $incrementing = $this->model()->incrementing;
-
-        $this->assertFalse($incrementing);
-    }
-
-    public function test_has_casts()
-    {
-        $expectedCasts = [
+        return [
             'id'                => 'string',
-            'email_verified_at' => 'datetime',
+            'email_verified_at' => 'datetime'
         ];
-
-        $casts = $this->model()->getCasts();
-
-        $this->assertEquals($expectedCasts, $casts);
     }
+
+
 }
