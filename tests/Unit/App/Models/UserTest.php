@@ -33,4 +33,17 @@ class UserTest extends TestCase
 
         $this->assertEquals($expectedTraits, $traits);
     }
+
+    public function test_fillable()
+    {
+        $fillable = $this->model()->getFillable();
+
+        $expectedFillable = [
+            'name',
+            'email',
+            'password'
+        ];
+
+        $this->assertEquals($expectedFillable, $fillable);
+    }
 }
