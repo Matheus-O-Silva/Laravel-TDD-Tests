@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Feature\App\Repositoy\Eloquent;
 
@@ -9,6 +10,8 @@ use Illuminate\Cache\Repository;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\FlareClient\Http\Exceptions\NotFound;
+use App\Repository\Exception\NotFoundException;
 use Tests\TestCase;
 
 class UserRepositoryTest extends TestCase
@@ -97,5 +100,23 @@ class UserRepositoryTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'new name'
         ]);
+    }
+
+    public function test_delete()
+    {
+        $user = User::factory()->create();
+
+        $deleted = $this->repository->delete($user->email);
+
+        $this->assertTrue($deleted);
+        $this->assertDatabaseMissing('users', [
+            'email' => $user->email
+        ]);
+    }
+
+    public function test_delete_not_found()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->repository->delete('fake_email');
     }
 }
