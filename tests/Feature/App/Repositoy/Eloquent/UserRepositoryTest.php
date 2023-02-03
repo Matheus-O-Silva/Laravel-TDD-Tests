@@ -6,6 +6,7 @@ use App\Repository\Eloquent\UserRepository;
 use App\Models\User;
 use App\Repository\Contracts\UserRepositoryInterface;
 use Illuminate\Cache\Repository;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -59,6 +60,42 @@ class UserRepositoryTest extends TestCase
         $this->assertIsObject($response);
         $this->assertDatabaseHas('users', [
             'email' => 'matheus.oliveira@gmail.com'
+        ]);
+    }
+
+    public function test_create_exception()
+    {
+        $this->expectException(QueryException::class);
+
+        $data = [
+            'name' => 'Matheus Oliveira',
+            //'email' => 'matheus.oliveira@gmail.com',
+            'password' => bcrypt('123456')
+        ];
+
+        $response = $this->repository->create($data);
+
+        $this->assertNotNull($response);
+        $this->assertIsObject($response);
+        $this->assertDatabaseHas('users', [
+            'email' => 'matheus.oliveira@gmail.com'
+        ]);
+    }
+
+    public function test_update()
+    {
+        $user = User::factory()->create();
+
+        $data = [
+            'name' => 'new name',
+        ];
+
+        $response = $this->repository->update($user->email, $data);
+
+        $this->assertNotNull($response);
+        $this->assertIsObject($response);
+        $this->assertDatabaseHas('users', [
+            'name' => 'new name'
         ]);
     }
 }
