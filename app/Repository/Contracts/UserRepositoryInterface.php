@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 interface UserRepositoryInterface
 {
     public function findAll(): array;
-    public function paginate();
+    public function paginate(int $page = 1): PaginationInterface;
     public function create(array $data): object;
     public function update(string $email, array $data): object;
     public function delete(string $email): bool;

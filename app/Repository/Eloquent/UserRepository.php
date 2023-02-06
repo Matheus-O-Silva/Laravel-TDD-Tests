@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Repository\Eloquent;
 
 use App\Models\User;
+use App\Repository\Presenters\PaginationPresenter;
+use App\Repository\Contracts\PaginationInterface;
 use App\Repository\Contracts\UserRepositoryInterface;
 use App\Repository\Exception\NotFoundException;
 
@@ -26,9 +28,9 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function paginate()
+    public function paginate(int $page = 1): PaginationInterface
     {
-        return $this->model->paginate();
+        return new PaginationPresenter($this->model->paginate());
     }
 
     public function update(string $email,array $data): object
