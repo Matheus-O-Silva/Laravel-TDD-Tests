@@ -60,10 +60,41 @@ class UserApiTest extends TestCase
         ];
     }
 
-    /*
+    public function test_create()
+    {
+        $payload = [
+            'name' => 'Matt',
+            'email' => 'math@test.com',
+            'password' => bcrypt('1234567')
+        ];
+
+        $response = $this->postJson($this->endpoint, $payload);
+        $response->assertCreated();
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'email'
+            ]
+        ]);
+    }
+
     public function test_create_validations()
     {
+        $payload = [
+            'name' => 'Matt',
+            'email' => 'math@test.com',
+            'password' => '1234567'
+        ];
 
+        $response = $this->postJson($this->endpoint, $payload);
+        $response->assertCreated();
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'email'
+            ]
+        ]);
     }
-    */
 }
