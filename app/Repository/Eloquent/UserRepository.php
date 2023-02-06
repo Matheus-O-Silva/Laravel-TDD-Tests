@@ -26,6 +26,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->create($data);
     }
 
+    public function paginate()
+    {
+        return $this->model->paginate();
+    }
+
     public function update(string $email,array $data): object
     {
         $user =  $this->find($email);
