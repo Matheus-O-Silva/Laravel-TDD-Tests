@@ -48,7 +48,7 @@ class UserApiTest extends TestCase
         ]);
 
         $this->assertEquals($total, $response['meta']['total']);
-        $this->assertEquals(1, $response['meta'][$page]);
+        $this->assertEquals($page, $response['meta']['current_page']);
     }
 
     public function dataProviderPagination(): array
@@ -65,7 +65,7 @@ class UserApiTest extends TestCase
         $payload = [
             'name' => 'Matt',
             'email' => 'math@test.com',
-            'password' => bcrypt('1234567')
+            'password' => '1234567'
         ];
 
         $response = $this->postJson($this->endpoint, $payload);
