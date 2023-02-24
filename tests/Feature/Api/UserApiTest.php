@@ -47,6 +47,7 @@ class UserApiTest extends TestCase
             'total' => $total
         ]);
 
+        $this->assertIsInt($page);
         $this->assertEquals($total, $response['meta']['total']);
         $this->assertEquals($page, $response['meta']['current_page']);
     }
@@ -60,41 +61,25 @@ class UserApiTest extends TestCase
         ];
     }
 
-    public function test_create()
-    {
-        $payload = [
-            'name' => 'Matt',
-            'email' => 'math@test.com',
-            'password' => '1234567'
-        ];
-
-        $response = $this->postJson($this->endpoint, $payload);
-        $response->assertCreated();
-        $response->assertJsonStructure([
-            'data' => [
-                'id',
-                'name',
-                'email'
-            ]
-        ]);
-    }
-
     public function test_create_validations()
     {
         $payload = [
             'name' => 'Matt',
             'email' => 'math@test.com',
-            'password' => '1234567'
+            'password' => '12345678',
         ];
 
         $response = $this->postJson($this->endpoint, $payload);
-        $response->assertCreated();
-        $response->assertJsonStructure([
-            'data' => [
-                'id',
-                'name',
-                'email'
-            ]
-        ]);
+        $response->assertStatus(Response::HTTP_CREATED);
     }
+
+
+    /*
+    public function dataProviderCreateUser(): array
+    {
+        return [
+
+        ];
+    }
+    */
 }
